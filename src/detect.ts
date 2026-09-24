@@ -4,7 +4,7 @@
  */
 
 import { readdirSync, statSync, existsSync } from "node:fs";
-import { join, relative, resolve } from "node:path";
+import { join, relative, resolve, sep } from "node:path";
 import type { DetectResult } from "./types.ts";
 import { CODE_EXTENSIONS } from "./types.ts";
 
@@ -51,6 +51,9 @@ export function detect(rootPath: string): DetectResult {
       if (name.startsWith(".")) continue;
 
       const full = join(dir, name);
+      // The graph stores and joins relative paths as POSIX paths (`resolveModulePath` splits on "/"),
+      // while `relative` returns platform separators - so normalise once, at the source.
+      const rel = relative(absRoot, full).split(sep).join("/");
       let st;
       try {
         st = statSync(full);
@@ -61,7 +64,6 @@ export function detect(rootPath: string): DetectResult {
       if (st.isDirectory()) {
         walk(full);
       } else if (st.isFile()) {
-        const rel = relative(absRoot, full);
         const ext = name.includes(".") ? name.slice(name.lastIndexOf(".")) : "";
 
         if (ext in CODE_EXTENSIONS) {
