@@ -1,0 +1,4 @@
+# Blank lines and comments are allowed. One pattern per line, `*` stays inside a path segment.
+generated
+
+**/skip.ts

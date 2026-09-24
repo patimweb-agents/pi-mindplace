@@ -43,3 +43,19 @@ describe("detect", () => {
     assert.ok(result.files.length === result.totalFiles);
   });
 });
+
+describe("detect with .mindplaceignore", () => {
+  const IGNORE_FIXTURES = resolve(import.meta.dirname ?? ".", "fixtures", "ignore-project");
+
+  it("keeps the folders and files of the patterns out of the graph", () => {
+    const result = detect(IGNORE_FIXTURES);
+
+    assert.deepEqual(result.files, ["src/keep.ts"]);
+  });
+
+  it("does not apply the ignore file of one project to another one", () => {
+    const result = detect(FIXTURES);
+
+    assert.ok(result.files.some((file) => file.endsWith("naming.ts")), "the sample project stays complete");
+  });
+});
