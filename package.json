@@ -33,7 +33,7 @@
     "url": "https://github.com/Smotherer007/pi-mindplace/issues"
   },
   "scripts": {
-    "test": "node --experimental-test-module-mocks --experimental-test-coverage --test 'tests/**/*.test.ts'",
+    "test": "node --experimental-test-module-mocks --experimental-test-coverage --test tests/**/*.test.ts",
     "test:watch": "node --experimental-test-module-mocks --test --watch 'tests/**/*.test.ts'"
   },
   "dependencies": {

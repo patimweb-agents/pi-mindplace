@@ -206,7 +206,10 @@ function extractJS_TS(filePath: string, source: string, root: string, tree: Tree
       return;
     }
 
-    if (t === "variable_declaration") {
+    // `const`/`let` declarations arrive as `lexical_declaration`, only `var` as `variable_declaration`.
+    // Both carry `variable_declarator` children, and since modern code declares almost every arrow
+    // function with `const`, handling `variable_declaration` alone loses those functions entirely.
+    if (t === "variable_declaration" || t === "lexical_declaration") {
       for (const ch of node.children) {
         if (ch.type === "variable_declarator") {
           const vn = ch.childForFieldName?.("name")?.text;

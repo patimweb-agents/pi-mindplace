@@ -72,6 +72,27 @@ mindplace_build noViz=true                # skip HTML visualization
 mindplace_build noReport=true             # skip report generation
 ```
 
+### Keep generated output of a project out of the graph
+
+`node_modules`, `.git`, `dist`, `build`, `.next`, `.cache`, `coverage`, `target`, `out`, `obj`, `venv`,
+`vendor` and `graph-out` are ignored by name. Everything else goes into a `.mindplaceignore` in the
+graph root — one glob per line, `#` starts a comment, `*` stays inside one path segment, `**` crosses
+segments:
+
+```
+# generated CAP build output
+scoda/gen
+
+# reports written by our own tooling
+sp-migration-temporary-report
+
+# every generated file, wherever it sits
+**/*.generated.ts
+```
+
+A directory that matches a pattern is not walked at all, so none of its files reach the graph. A
+project without a `.mindplaceignore` detects exactly what it detected before.
+
 ### Query the graph
 
 ```
