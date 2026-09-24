@@ -71,4 +71,17 @@ describe("extract", () => {
       }
     }
   });
+
+  it("extracts const declarations, which are lexical declarations", async () => {
+    const detected = detect(FIXTURES);
+    const result = await extract(FIXTURES, detected.files);
+
+    const arrow = result.nodes.find((node) => node.label === "normalise");
+    const functionExpression = result.nodes.find((node) => node.label === "retry");
+    const value = result.nodes.find((node) => node.label === "MAX_RETRIES");
+
+    assert.equal(arrow?.type, "function", "an arrow function in a const should be a function");
+    assert.equal(functionExpression?.type, "function", "a function expression in a const should be a function");
+    assert.equal(value?.type, "variable", "a plain const should stay a variable");
+  });
 });
